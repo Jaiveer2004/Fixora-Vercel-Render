@@ -5,6 +5,7 @@ const MongoStore = require('connect-mongo');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 
+const healthRoutes = require('./routes/health.routes');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const partnerRoutes = require('./routes/partner.routes');
@@ -21,6 +22,9 @@ const passport = require('./config/passport');
 const { apiLimiter } = require('./middlewares/rateLimit.middleware');
 
 const app = express();
+
+// Trust proxy - Required for Render/Heroku deployment
+app.set('trust proxy', 1);
 
 // Middlewares:
 app.use(cors({
@@ -81,6 +85,7 @@ app.get('/', (req, res) => {
 });
 
 // Routes:
+app.use('/api', healthRoutes); // Health check - no rate limit
 app.use('/api', apiLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);

@@ -7,6 +7,7 @@ const apiLimiter = rateLimit({
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  trustProxy: true, // Trust reverse proxy (required for Render)
 });
 
 // Strict limiter for auth routes
@@ -15,6 +16,7 @@ const authLimiter = rateLimit({
   max: 5, // 5 attempts per window
   skipSuccessfulRequests: true,
   message: 'Too many login attempts, please try again later.',
+  trustProxy: true,
 });
 
 // OTP request limiter
@@ -22,6 +24,7 @@ const otpLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
   max: 3, // 3 OTP requests per 5 minutes
   message: 'Too many OTP requests, please try again later.',
+  trustProxy: true,
 });
 
 // Email verification limiter
@@ -29,6 +32,7 @@ const verificationLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 5, // 5 verification attempts per hour
   message: 'Too many verification attempts, please try again later.',
+  trustProxy: true,
 });
 
 module.exports = {
